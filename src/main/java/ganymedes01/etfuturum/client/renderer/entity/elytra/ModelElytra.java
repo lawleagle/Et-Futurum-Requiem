@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ganymedes01.etfuturum.elytra.IClientElytraPlayer;
 import ganymedes01.etfuturum.elytra.IElytraPlayer;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -14,26 +15,20 @@ import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
 public class ModelElytra extends ModelBase {
-	private final ModelRenderer rightWing;
-	private final ModelRenderer leftWing = new ModelRenderer(this, 22, 0);
+
+	public ElytraRenderer elytraRenderer;
 
 	public ModelElytra() {
-		this.leftWing.addBox(-10.0F, 0.0F, 0.0F, 10, 20, 2, 1.0F);
-		this.rightWing = new ModelRenderer(this, 22, 0);
-		this.rightWing.mirror = true;
-		this.rightWing.addBox(0.0F, 0.0F, 0.0F, 10, 20, 2, 1.0F);
+		elytraRenderer = new ElytraRenderer(this, 22, 0);
 	}
 
 	/**
 	 * Sets the models various rotation angles then renders the model.
 	 */
 	@Override
-	public void render(Entity entityIn, float p_78088_2_, float limbSwing, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		GL11.glDisable(GL11.GL_CULL_FACE);
-
-		this.leftWing.render(scale);
-		this.rightWing.render(scale);
+	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		elytraRenderer.player = (AbstractClientPlayer) entityIn;
+		elytraRenderer.render(scale);
 	}
 
 	/**
@@ -68,28 +63,28 @@ public class ModelElytra extends ModelBase {
 			f3 = 0.08726646F;
 		}
 
-		this.leftWing.rotationPointX = 5.0F;
-		this.leftWing.rotationPointY = f2;
+		this.elytraRenderer.leftWing.rotationPointX = 5.0F;
+		this.elytraRenderer.leftWing.rotationPointY = f2;
 
 		if (entityIn instanceof IClientElytraPlayer) {
 			IClientElytraPlayer cep = (IClientElytraPlayer) entityIn;
 			cep.setRotateElytraX((float) (cep.getRotateElytraX() + (f - cep.getRotateElytraX()) * 0.1D));
 			cep.setRotateElytraY((float) (cep.getRotateElytraY() + (f3 - cep.getRotateElytraY()) * 0.1D));
 			cep.setRotateElytraZ((float) (cep.getRotateElytraZ() + (f1 - cep.getRotateElytraZ()) * 0.1D));
-			this.leftWing.rotateAngleX = cep.getRotateElytraX();
-			this.leftWing.rotateAngleY = cep.getRotateElytraY();
-			this.leftWing.rotateAngleZ = cep.getRotateElytraZ();
+			this.elytraRenderer.leftWing.rotateAngleX = cep.getRotateElytraX();
+			this.elytraRenderer.leftWing.rotateAngleY = cep.getRotateElytraY();
+			this.elytraRenderer.leftWing.rotateAngleZ = cep.getRotateElytraZ();
 		} else {
-			this.leftWing.rotateAngleX = f;
-			this.leftWing.rotateAngleZ = f1;
-			this.leftWing.rotateAngleY = f3;
+			this.elytraRenderer.leftWing.rotateAngleX = f;
+			this.elytraRenderer.leftWing.rotateAngleZ = f1;
+			this.elytraRenderer.leftWing.rotateAngleY = f3;
 		}
 
-		this.rightWing.rotationPointX = -this.leftWing.rotationPointX;
-		this.rightWing.rotateAngleY = -this.leftWing.rotateAngleY;
-		this.rightWing.rotationPointY = this.leftWing.rotationPointY;
-		this.rightWing.rotateAngleX = this.leftWing.rotateAngleX;
-		this.rightWing.rotateAngleZ = -this.leftWing.rotateAngleZ;
+		this.elytraRenderer.rightWing.rotationPointX = -this.elytraRenderer.leftWing.rotationPointX;
+		this.elytraRenderer.rightWing.rotateAngleY = -this.elytraRenderer.leftWing.rotateAngleY;
+		this.elytraRenderer.rightWing.rotationPointY = this.elytraRenderer.leftWing.rotationPointY;
+		this.elytraRenderer.rightWing.rotateAngleX = this.elytraRenderer.leftWing.rotateAngleX;
+		this.elytraRenderer.rightWing.rotateAngleZ = -this.elytraRenderer.leftWing.rotateAngleZ;
 	}
 
 	/**

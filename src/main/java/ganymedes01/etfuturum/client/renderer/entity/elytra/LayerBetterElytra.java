@@ -24,16 +24,16 @@ import org.lwjgl.opengl.GL11;
 public class LayerBetterElytra {
 
 	private static final ResourceLocation TEXTURE_ELYTRA = new ResourceLocation("textures/entity/elytra.png");
-	private static final ModelElytra modelElytra = new ModelElytra();
+	public static final ModelElytra modelElytra = new ModelElytra();
 	protected static final ResourceLocation ENCHANTED_ITEM_GLINT_RES = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 	public static float netHeadYaw = 0.0F;
 	public static float headPitch = 0.0F;
 
-	public static void doRenderLayer(EntityLivingBase entityIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float scale) {
-		ItemStack itemstack = ItemArmorElytra.getElytra(entityIn);
-		if (entityIn instanceof AbstractClientPlayer && itemstack != null) {
-			AbstractClientPlayer player = (AbstractClientPlayer) entityIn;
-			GL11.glPushAttrib(-1);
+//	public static void doRenderLayer(EntityLivingBase entityIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float scale) {
+//		ItemStack itemstack = ItemArmorElytra.getElytra(entityIn);
+//		if (entityIn instanceof AbstractClientPlayer && itemstack != null) {
+//			AbstractClientPlayer player = (AbstractClientPlayer) entityIn;
+
 			/*
 			int colorIndex =
 					itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey("backlytra:elytraDye", NBT.TAG_ANY_NUMERIC)
@@ -53,20 +53,16 @@ public class LayerBetterElytra {
 			 */
 //          GL11.glColor3f(1, 1, 1);
 
-			Minecraft.getMinecraft().renderEngine.bindTexture(player.func_152122_n() ? player.getLocationCape() : TEXTURE_ELYTRA);
 
-			GL11.glPushMatrix();
-			GL11.glTranslatef(0.0F, 0.0F, 0.125F);
-			modelElytra.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
-			modelElytra.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
-			if (itemstack.isItemEnchanted())
-				renderGlint(entityIn, modelElytra, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
-
-			GL11.glPopMatrix();
-			GL11.glPopAttrib();
-		}
-	}
+//			GL11.glTranslatef(0.0F, 0.0F, 0.125F);
+//			modelElytra.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
+//			modelElytra.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+//
+//			if (itemstack.isItemEnchanted())
+//				renderGlint(entityIn, modelElytra, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+//		}
+//	}
 
 	private static void renderGlint(EntityLivingBase entitylivingbaseIn, ModelElytra modelbaseIn, float p_177183_3_, float p_177183_4_, float partialTicks, float p_177183_6_, float p_177183_7_, float p_177183_8_, float scale) {
 		float f = entitylivingbaseIn.ticksExisted + partialTicks;

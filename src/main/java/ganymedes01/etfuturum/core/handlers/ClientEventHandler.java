@@ -19,7 +19,9 @@ import ganymedes01.etfuturum.client.OpenGLHelper;
 import ganymedes01.etfuturum.client.gui.GuiConfigWarning;
 import ganymedes01.etfuturum.client.gui.GuiGamemodeSwitcher;
 import ganymedes01.etfuturum.client.particle.CustomParticles;
+import ganymedes01.etfuturum.client.renderer.entity.elytra.ElytraRenderer;
 import ganymedes01.etfuturum.client.renderer.entity.elytra.LayerBetterElytra;
+import ganymedes01.etfuturum.client.renderer.entity.elytra.ModelElytra;
 import ganymedes01.etfuturum.client.sound.AmbienceLoop;
 import ganymedes01.etfuturum.client.sound.BeeFlySound;
 import ganymedes01.etfuturum.client.sound.ElytraSound;
@@ -44,12 +46,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiScreenBook;
 import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -366,6 +370,10 @@ public class ClientEventHandler {
 
 	@SubscribeEvent
 	public void renderPlayerEventPre(RenderPlayerEvent.Pre event) {
+		if (event.entityPlayer instanceof IElytraPlayer) {
+			event.renderer.modelBipedMain.bipedBody.addChild(LayerBetterElytra.modelElytra.elytraRenderer);
+//			LayerBetterElytra.doRenderLayer(event.entityLiving, event.entityPlayer.limbSwing, event.entityPlayer.limbSwingAmount, Minecraft.getMinecraft().timer.renderPartialTicks, event.entityPlayer.getAge(), 0.0625F);
+		}
 		if (ConfigFunctions.enableTransparentAmour) {
 			OpenGLHelper.enableBlend();
 			OpenGLHelper.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -375,7 +383,8 @@ public class ClientEventHandler {
 	@SubscribeEvent
 	public void renderPlayerSetArmour(SetArmorModel event) {
 		if (event.entityPlayer instanceof IElytraPlayer) {
-			LayerBetterElytra.doRenderLayer(event.entityLiving, event.entityPlayer.limbSwing, event.entityPlayer.limbSwingAmount, Minecraft.getMinecraft().timer.renderPartialTicks, event.entityPlayer.getAge(), 0.0625F);
+			LayerBetterElytra.modelElytra.elytraRenderer.player = (AbstractClientPlayer) event.entityLiving;
+//			LayerBetterElytra.doRenderLayer(event.entityLiving, event.entityPlayer.limbSwing, event.entityPlayer.limbSwingAmount, Minecraft.getMinecraft().timer.renderPartialTicks, event.entityPlayer.getAge(), 0.0625F);
 		}
 
 		if (isSpectator(event.entityPlayer)) {
